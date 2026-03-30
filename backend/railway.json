@@ -1,0 +1,26 @@
+{
+  "build": {
+    "builder": "NIXPACKS"
+  },
+  "deploy": {
+    "startCommand": "npm start"
+  },
+  "environments": {
+    "production": {
+      "variables": {
+        "NODE_ENV": "production",
+        "PORT": "8080",
+        "SUPABASE_URL": "@supabase_url",
+        "SUPABASE_ANON_KEY": "@supabase_anon_key",
+        "SUPABASE_SERVICE_ROLE_KEY": "@supabase_service_role_key",
+        "FRONTEND_ORIGIN": "@frontend_origin",
+        "FRONTEND_RESET_PASSWORD_URL": "@frontend_reset_password_url",
+        "FRONTEND_INVITATION_URL": "@frontend_invitation_url",
+        "SYSTEM_FROM_EMAIL": "@system_from_email",
+        "RESEND_API_KEY": "@resend_api_key",
+        "PROFILE_AVATAR_BUCKET": "@profile_avatar_bucket",
+        "WORKSPACE_LOGO_BUCKET": "@workspace_logo_bucket"
+      }
+    }
+  }
+}
