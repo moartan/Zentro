@@ -14,6 +14,7 @@ import subscriptionsRoutes from './routes/subscriptions.js';
 import teamsRoutes from './routes/teams.js';
 import profileRoutes from './routes/profile.js';
 import notificationsRoutes from './routes/notifications.js';
+import dashboardRoutes from './routes/dashboard.js';
 
 export const app = express();
 
@@ -33,3 +34,4 @@ app.use(subscriptionsRoutes);
 app.use(teamsRoutes);
 app.use(profileRoutes);
 app.use(notificationsRoutes);
+app.use(dashboardRoutes);
