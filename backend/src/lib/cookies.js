@@ -5,7 +5,7 @@ export function buildCookieOptions(isProd, maxAgeMs) {
   return {
     httpOnly: true,
     secure: isProd,
-    sameSite: 'lax',
+    sameSite: isProd ? 'none' : 'lax',
     path: '/',
     maxAge: maxAgeMs,
   };
@@ -25,4 +25,3 @@ export function clearSessionCookies(res) {
   res.clearCookie(ACCESS_COOKIE, { path: '/' });
   res.clearCookie(REFRESH_COOKIE, { path: '/' });
 }
-
