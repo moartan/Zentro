@@ -192,20 +192,22 @@ export default function DashboardPage() {
   const userTypes = useMemo(() => {
     if (!summary?.userTypes) return mock.userTypes;
 
-    if (currentRole === 'super_admin' && isSuperAdminUserTypes(summary.userTypes)) {
+    const apiUserTypes = summary.userTypes;
+
+    if (currentRole === 'super_admin' && isSuperAdminUserTypes(apiUserTypes)) {
       return mock.userTypes.map((item, index) => {
-        if (index === 0) return { ...item, count: summary.userTypes.platformAdmins };
-        if (index === 1) return { ...item, count: summary.userTypes.workspaceOwners };
-        if (index === 2) return { ...item, count: summary.userTypes.workspaceMembers };
+        if (index === 0) return { ...item, count: apiUserTypes.platformAdmins };
+        if (index === 1) return { ...item, count: apiUserTypes.workspaceOwners };
+        if (index === 2) return { ...item, count: apiUserTypes.workspaceMembers };
         return item;
       });
     }
 
-    if (isWorkspaceUserTypes(summary.userTypes)) {
+    if (isWorkspaceUserTypes(apiUserTypes)) {
       return mock.userTypes.map((item, index) => {
-        if (index === 0) return { ...item, count: summary.userTypes.owners };
-        if (index === 1) return { ...item, count: summary.userTypes.managers };
-        if (index === 2) return { ...item, count: summary.userTypes.members };
+        if (index === 0) return { ...item, count: apiUserTypes.owners };
+        if (index === 1) return { ...item, count: apiUserTypes.managers };
+        if (index === 2) return { ...item, count: apiUserTypes.members };
         return item;
       });
     }
