@@ -21,7 +21,7 @@ function isSchemaNotReadyError(error) {
 
 router.get('/api/notifications', async (req, res) => {
   try {
-    const actor = await getActor(req, res);
+    const actor = await getActor(req, res, { requireBusinessContext: false });
     if (!actor) return;
 
     const limitParsed = z.coerce.number().int().min(1).max(50).optional().safeParse(req.query.limit);
@@ -60,7 +60,7 @@ router.get('/api/notifications', async (req, res) => {
 
 router.patch('/api/notifications/:id/read', async (req, res) => {
   try {
-    const actor = await getActor(req, res);
+    const actor = await getActor(req, res, { requireBusinessContext: false });
     if (!actor) return;
 
     const parsedId = z.string().uuid().safeParse(req.params.id);
@@ -85,7 +85,7 @@ router.patch('/api/notifications/:id/read', async (req, res) => {
 
 router.patch('/api/notifications/read-all', async (req, res) => {
   try {
-    const actor = await getActor(req, res);
+    const actor = await getActor(req, res, { requireBusinessContext: false });
     if (!actor) return;
 
     const { error } = await markAllNotificationsRead({
@@ -105,7 +105,7 @@ router.patch('/api/notifications/read-all', async (req, res) => {
 
 router.get('/api/notifications/preferences', async (req, res) => {
   try {
-    const actor = await getActor(req, res);
+    const actor = await getActor(req, res, { requireBusinessContext: false });
     if (!actor) return;
 
     const { error, preferences } = await getNotificationPreferences(actor.userId);
@@ -124,7 +124,7 @@ const preferencesSchema = z.object({
 
 router.patch('/api/notifications/preferences', async (req, res) => {
   try {
-    const actor = await getActor(req, res);
+    const actor = await getActor(req, res, { requireBusinessContext: false });
     if (!actor) return;
 
     const parsed = preferencesSchema.safeParse(req.body);

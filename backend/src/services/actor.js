@@ -74,7 +74,7 @@ export async function resolveActorContext({ userId, requestedBusinessId }) {
   };
 }
 
-export async function getActor(req, res) {
+export async function getActor(req, res, options = {}) {
   const { user } = await resolveSessionFromCookies(req, res);
 
   const requestedBusinessId = req.header('x-business-id') ?? env.DEV_BUSINESS_ID ?? null;
@@ -110,7 +110,9 @@ export async function getActor(req, res) {
     return null;
   }
 
-  if (!context.businessId) {
+  const requireBusinessContext = options.requireBusinessContext !== false;
+
+  if (requireBusinessContext && !context.businessId) {
     res.status(400).json({
       success: false,
       error: {
