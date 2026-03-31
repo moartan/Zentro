@@ -1,6 +1,18 @@
 {
   "rewrites": [
     {
+      "source": "/auth/(.*)",
+      "destination": "https://zentro-production-e03a.up.railway.app/auth/$1"
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": "https://zentro-production-e03a.up.railway.app/api/$1"
+    },
+    {
+      "source": "/health",
+      "destination": "https://zentro-production-e03a.up.railway.app/health"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
