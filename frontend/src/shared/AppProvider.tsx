@@ -84,12 +84,17 @@ function normalizeAuthUser(user: AuthSessionUser, membershipsFromDetails?: AuthM
 }
 
 async function fetchSessionBootstrap(): Promise<AuthSessionUser | null> {
-  const response = await fetch(`${API_BASE_URL}/auth/session`, {
-    method: 'GET',
-    credentials: 'include',
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE_URL}/auth/session`, {
+      method: 'GET',
+      credentials: 'include',
+    });
+  } catch {
+    throw new Error(`Cannot reach backend at ${API_BASE_URL}. Check API URL/CORS/deployment.`);
+  }
 
-  const payload = await response.json();
+  const payload = await response.json().catch(() => ({}));
   if (!response.ok) {
     throw new Error(payload?.error?.message ?? 'Failed to fetch session');
   }
@@ -98,12 +103,17 @@ async function fetchSessionBootstrap(): Promise<AuthSessionUser | null> {
 }
 
 async function fetchSessionDetails(): Promise<AuthMembership[]> {
-  const response = await fetch(`${API_BASE_URL}/auth/session-details`, {
-    method: 'GET',
-    credentials: 'include',
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE_URL}/auth/session-details`, {
+      method: 'GET',
+      credentials: 'include',
+    });
+  } catch {
+    throw new Error(`Cannot reach backend at ${API_BASE_URL}. Check API URL/CORS/deployment.`);
+  }
 
-  const payload = await response.json();
+  const payload = await response.json().catch(() => ({}));
   if (!response.ok) {
     throw new Error(payload?.error?.message ?? 'Failed to fetch session details');
   }
@@ -184,14 +194,19 @@ export default function AppProvider({ children }: Props) {
   }, []);
 
   async function signIn(email: string, password: string) {
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
+    let response: Response;
+    try {
+      response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+    } catch {
+      throw new Error(`Cannot reach backend at ${API_BASE_URL}. Check API URL/CORS/deployment.`);
+    }
 
-    const payload = await response.json();
+    const payload = await response.json().catch(() => ({}));
     if (!response.ok) {
       throw new Error(payload?.error?.message ?? 'Login failed');
     }
