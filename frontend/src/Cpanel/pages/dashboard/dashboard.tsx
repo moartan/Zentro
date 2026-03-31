@@ -1,6 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useApp } from '../../../shared/AppProvider';
-import { getDashboardSummary, type DashboardSummary } from '../../../shared/api/dashboard';
+import {
+  getDashboardSummary,
+  type DashboardSummary,
+  type SuperAdminUserTypes,
+  type WorkspaceUserTypes,
+} from '../../../shared/api/dashboard';
 
 type DashboardRole = 'super_admin' | 'business_owner' | 'employee';
 
@@ -194,25 +199,26 @@ export default function DashboardPage() {
 
     const apiUserTypes = summary.userTypes;
 
-    if (currentRole === 'super_admin' && isSuperAdminUserTypes(apiUserTypes)) {
+    if (currentRole === 'super_admin') {
+      if (!isSuperAdminUserTypes(apiUserTypes)) return mock.userTypes;
+      const superTypes: SuperAdminUserTypes = apiUserTypes;
       return mock.userTypes.map((item, index) => {
-        if (index === 0) return { ...item, count: apiUserTypes.platformAdmins };
-        if (index === 1) return { ...item, count: apiUserTypes.workspaceOwners };
-        if (index === 2) return { ...item, count: apiUserTypes.workspaceMembers };
+        if (index === 0) return { ...item, count: superTypes.platformAdmins };
+        if (index === 1) return { ...item, count: superTypes.workspaceOwners };
+        if (index === 2) return { ...item, count: superTypes.workspaceMembers };
         return item;
       });
     }
 
-    if (isWorkspaceUserTypes(apiUserTypes)) {
-      return mock.userTypes.map((item, index) => {
-        if (index === 0) return { ...item, count: apiUserTypes.owners };
-        if (index === 1) return { ...item, count: apiUserTypes.managers };
-        if (index === 2) return { ...item, count: apiUserTypes.members };
-        return item;
-      });
-    }
+    if (!isWorkspaceUserTypes(apiUserTypes)) return mock.userTypes;
+    const workspaceTypes: WorkspaceUserTypes = apiUserTypes;
 
-    return mock.userTypes;
+    return mock.userTypes.map((item, index) => {
+      if (index === 0) return { ...item, count: workspaceTypes.owners };
+      if (index === 1) return { ...item, count: workspaceTypes.managers };
+      if (index === 2) return { ...item, count: workspaceTypes.members };
+      return item;
+    });
   }, [currentRole, mock.userTypes, summary]);
 
   const highlights = useMemo(() => {
